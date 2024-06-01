@@ -1,0 +1,15 @@
+greeting:
+  message: "hello"
+
+quarkus:
+  log:
+    file:
+      enable: true
+      level: DEBUG
+      path: log/quarkus.log
+  application:
+    name: quarkus-demo
+  console:
+    color: true
+  http:
+    port: 8081
