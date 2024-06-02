@@ -31,14 +31,14 @@ public class LoggerInterceptor {
         if (result instanceof String) {
             // If the response is a String
             String responsePayload = (String) result;
-            System.out.println("String Response payload: " + responsePayload);
+            logger.debug("String Response payload: " + responsePayload);
         } else if (result instanceof Buffer) {
             // If the response is a Buffer (typically used in Vert.x)
             Buffer responseBuffer = (Buffer) result;
             String responsePayload = responseBuffer.toString();
-            System.out.println("Buffer Response payload: " + responsePayload);
+            logger.debug("Buffer Response payload: " + responsePayload);
         }
-        logger.info(routingContext.request().headers().entries());
+        // logger.info(routingContext.request().headers().entries());
         logger.info(routingContext.response());
         long end = System.currentTimeMillis();
         logger.infof("Total time taken by method [%s] is %f ms.\n", context.getMethod().getName(), (end - start) / 1.0);
