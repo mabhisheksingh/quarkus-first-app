@@ -25,7 +25,6 @@ public class GlobalExceptionHandler implements ExceptionMapper<Exception> {
                     .statusCode(Response.Status.CONFLICT.getStatusCode())
                     .message(exception.getMessage())
                     .build();
-
         }
         return Response.status(exceptionEntity.getStatus())
                 .entity(exceptionEntity)
