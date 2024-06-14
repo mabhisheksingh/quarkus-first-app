@@ -11,6 +11,11 @@ You can run your application in dev mode that enables live coding using:
 ./mvnw compile quarkus:dev
 ```
 
+if u have maven installed You can run your application in dev mode that enables live coding using:
+```shell script
+mvn compile quarkus:dev
+```
+
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
@@ -47,6 +52,10 @@ You can then execute your native executable with: `./target/code-with-quarkus-1.
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
 
+
+
+
+
 ## Related Guides
 
 - JDBC Driver - H2 ([guide](https://quarkus.io/guides/datasource)): Connect to the H2 database via JDBC
@@ -68,3 +77,9 @@ The Quarkus application configuration is located in `src/main/resources/applicat
 Easily start your RESTful Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+
+
+## Docker compose file
+In docker compose file added two service postgres and keycloak both will use docker and we are setting postgres sql as backend for DB for keycloak
+
+Once u run docker compose file then u should login in http://localhost:8080/ and create new relam [Relam JSON data](/quarkus-auth-poc.json)

@@ -1,5 +1,8 @@
 package org.acme.controller;
 
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
@@ -22,10 +25,27 @@ import org.hibernate.exception.ConstraintViolationException;
 
 @Path("/v1/api/emp")
 @Logged
+@Authenticated
 public class EmployeeController {
 
     @Inject
     private EmployeeService employeeService;
+
+    @GET
+    @Path("/test")
+    @Produces(MediaType.TEXT_PLAIN)
+    @PermitAll
+    public Response test() {
+        return Response.ok("Hello pass public").build();
+    }
+
+    @GET
+    @Path("/testp")
+    @Produces(MediaType.TEXT_PLAIN)
+
+    public Response testP() {
+        return Response.ok("Hello pass Auth").build();
+    }
 
     @POST
     @Path("/create")
