@@ -46,6 +46,11 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
+<!--Swagger -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -76,7 +81,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-oidc</artifactId>
-    </dependency>
+  </dependency>
+  <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-keycloak-authorization</artifactId>
+  </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>

@@ -1,50 +1,33 @@
 package org.acme.controller;
 
 import io.quarkus.security.Authenticated;
-import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.List;
-import java.util.Objects;
-
-import org.acme.exception.BadRequestException;
 import org.acme.exception.DublicateDataException;
 import org.acme.pojo.Employee;
 import org.acme.service.EmployeeService;
 import org.acme.utils.customAOP.Logged;
 import org.hibernate.exception.ConstraintViolationException;
 
+import java.util.List;
+import java.util.Objects;
+
 @Path("/v1/api/emp")
 @Logged
-@Authenticated
+//@Authenticated
 public class EmployeeController {
 
     @Inject
     private EmployeeService employeeService;
 
     @GET
-    @Path("/test")
+    @Path("/public/test")
     @Produces(MediaType.TEXT_PLAIN)
-    @PermitAll
     public Response test() {
         return Response.ok("Hello pass public").build();
-    }
-
-    @GET
-    @Path("/testp")
-    @Produces(MediaType.TEXT_PLAIN)
-
-    public Response testP() {
-        return Response.ok("Hello pass Auth").build();
     }
 
     @POST
@@ -54,7 +37,7 @@ public class EmployeeController {
     @Transactional
     public Response createEmp(Employee emp) {
         if (Objects.isNull(emp)) {
-            throw new NullPointerException("EMPLOYEE Obj is nulll");
+            throw new NullPointerException("EMPLOYEE Obj is null");
         }
         try {
             employeeService.persist(emp);
@@ -71,8 +54,6 @@ public class EmployeeController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public List<Employee> getAllEmp() {
-
         return employeeService.listAll();
-
     }
 }
