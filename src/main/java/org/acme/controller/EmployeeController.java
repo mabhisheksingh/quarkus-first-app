@@ -38,6 +38,7 @@ public class EmployeeController {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
+    @SecurityRequirement(name = "keycloak-custom")
     public Response createEmp(Employee emp) {
         if (Objects.isNull(emp)) {
             throw new NullPointerException("EMPLOYEE Obj is null");
