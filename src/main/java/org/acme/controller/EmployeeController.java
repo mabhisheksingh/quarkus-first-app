@@ -10,6 +10,9 @@ import org.acme.exception.DublicateDataException;
 import org.acme.pojo.Employee;
 import org.acme.service.EmployeeService;
 import org.acme.utils.customAOP.Logged;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
@@ -53,6 +56,7 @@ public class EmployeeController {
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @SecurityRequirement(name = "keycloak-custom")
     public List<Employee> getAllEmp() {
         return employeeService.listAll();
     }
