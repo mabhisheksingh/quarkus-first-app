@@ -7,7 +7,7 @@
   "baseUrl": "http://localhost:9001/",
   "surrogateAuthRequired": false,
   "enabled": true,
-  "alwaysDisplayInConsole": true,
+  "alwaysDisplayInConsole": false,
   "clientAuthenticatorType": "client-secret",
   "secret": "y6fPeUWNHNMHOYaj2KrKezbl9jUohC6n",
   "redirectUris": [
@@ -21,7 +21,7 @@
   "bearerOnly": false,
   "consentRequired": false,
   "standardFlowEnabled": true,
-  "implicitFlowEnabled": true,
+  "implicitFlowEnabled": false,
   "directAccessGrantsEnabled": true,
   "serviceAccountsEnabled": true,
   "authorizationServicesEnabled": true,
@@ -29,14 +29,17 @@
   "frontchannelLogout": true,
   "protocol": "openid-connect",
   "attributes": {
-    "oidc.ciba.grant.enabled": "true",
+    "oidc.ciba.grant.enabled": false,
     "client.secret.creation.time": "1718361897",
     "backchannel.logout.session.required": "true",
     "login_theme": "keycloak",
     "post.logout.redirect.uris": "http://localhost:9001/logout",
     "display.on.consent.screen": "false",
-    "oauth2.device.authorization.grant.enabled": "true",
-    "backchannel.logout.revoke.offline.tokens": "false"
+    "oauth2.device.authorization.grant.enabled": false,
+    "backchannel.logout.revoke.offline.tokens": "false",
+    "consent.screen.text": "",
+    "frontchannel.logout.url": "",
+    "backchannel.logout.url": ""
   },
   "authenticationFlowBindingOverrides": {},
   "fullScopeAllowed": true,
@@ -58,21 +61,6 @@
       }
     },
     {
-      "name": "Client ID",
-      "protocol": "openid-connect",
-      "protocolMapper": "oidc-usersessionmodel-note-mapper",
-      "consentRequired": false,
-      "config": {
-        "user.session.note": "client_id",
-        "introspection.token.claim": "true",
-        "userinfo.token.claim": "true",
-        "id.token.claim": "true",
-        "access.token.claim": "true",
-        "claim.name": "client_id",
-        "jsonType.label": "String"
-      }
-    },
-    {
       "name": "Client Host",
       "protocol": "openid-connect",
       "protocolMapper": "oidc-usersessionmodel-note-mapper",
@@ -84,6 +72,21 @@
         "id.token.claim": "true",
         "access.token.claim": "true",
         "claim.name": "clientHost",
+        "jsonType.label": "String"
+      }
+    },
+    {
+      "name": "Client ID",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-usersessionmodel-note-mapper",
+      "consentRequired": false,
+      "config": {
+        "user.session.note": "client_id",
+        "introspection.token.claim": "true",
+        "userinfo.token.claim": "true",
+        "id.token.claim": "true",
+        "access.token.claim": "true",
+        "claim.name": "client_id",
         "jsonType.label": "String"
       }
     }

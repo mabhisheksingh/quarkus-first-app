@@ -1,0 +1,15 @@
+{
+  "realm": "quarkus-keycloak-POC",
+  "auth-server-url": "http://localhost:8080/",
+  "ssl-required": "external",
+  "resource": "quarkus-auth-poc",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "y6fPeUWNHNMHOYaj2KrKezbl9jUohC6n"
+  },
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "policy-enforcer": {
+    "credentials": {}
+  }
+}

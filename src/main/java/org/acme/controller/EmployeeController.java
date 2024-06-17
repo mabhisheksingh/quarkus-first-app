@@ -1,28 +1,27 @@
 package org.acme.controller;
 
-import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.exception.BadRequestException;
 import org.acme.exception.DublicateDataException;
 import org.acme.pojo.Employee;
 import org.acme.service.EmployeeService;
 import org.acme.utils.customAOP.Logged;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirements;
-import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.hibernate.exception.ConstraintViolationException;
+import org.jboss.logging.Logger;
 
 import java.util.List;
 import java.util.Objects;
 
 @Path("/v1/api/emp")
 @Logged
-//@Authenticated
 public class EmployeeController {
-
+    private Logger log = Logger.getLogger(EmployeeController.class);
     @Inject
     private EmployeeService employeeService;
 
@@ -35,6 +34,7 @@ public class EmployeeController {
 
     @POST
     @Path("/create")
+    @RolesAllowed({"admin", "user"})
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -57,8 +57,27 @@ public class EmployeeController {
     @Path("/getAll")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
+    @RolesAllowed({"admin"})
     @SecurityRequirement(name = "keycloak-custom")
     public List<Employee> getAllEmp() {
         return employeeService.listAll();
+    }
+
+    @GET
+    @Path("/getEmpByID")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    @RolesAllowed({"user"})
+    @SecurityRequirement(name = "keycloak-custom")
+    public Response getAllEmpById(@QueryParam("id") Long id) throws BadRequestException {
+        System.out.println("ID " + id);
+        Employee employee = employeeService.findById(id);
+        log.info("Id " + id);
+        log.info("Employee " + employee);
+        if (Objects.isNull(employee)) {
+            throw new BadRequestException("ID not find ");
+        }
+        return Response.ok(employee).build();
+
     }
 }

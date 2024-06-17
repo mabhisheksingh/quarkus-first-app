@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   postgres:
     image: postgres
@@ -11,6 +10,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - keycloak_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   auth-keycloak-server:
     image: quay.io/keycloak/keycloak:latest
@@ -35,10 +36,16 @@ services:
     restart: always
     networks:
       - keycloak_network
+    volumes:
+      - keycloak_data:/var/lib/keycloak/data
 
 volumes:
   postgres_data:
     driver: local
+    name: postgres_data
+  keycloak_data:
+    driver: local
+    name: keycloak_data
 
 networks:
   keycloak_network:

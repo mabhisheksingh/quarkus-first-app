@@ -88,7 +88,7 @@ In docker compose file added two service postgres and keycloak both will use doc
 backend for DB for keycloak
 
 Once u run docker compose file then u should login in http://localhost:8080/ and create new
-relam [Relam JSON data](/quarkus-auth-poc.json)
+relam [Relam JSON data](/keycloak/quarkus-auth-poc.json)
 
 ## Notes
 
@@ -142,3 +142,7 @@ Suitable for backend services, microservices, or APIs that are consumed by other
 Example: A RESTful API providing data to a mobile app, or a backend microservice in a microservices architecture.
 
 ```
+
+### For Authroization
+
+We need to create 2 user in keycloak relam and assign a role from client so that their access token can use as a role based accesed in this application for this example i have created two user abhishekuser(assign role user) and abhishek(assigned role user)
