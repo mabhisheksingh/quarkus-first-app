@@ -3,6 +3,7 @@ package org.acme.controller;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -39,7 +40,7 @@ public class EmployeeController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     @SecurityRequirement(name = "keycloak-custom")
-    public Response createEmp(Employee emp) {
+    public Response createEmp(@Valid Employee emp) {
         if (Objects.isNull(emp)) {
             throw new NullPointerException("EMPLOYEE Obj is null");
         }
