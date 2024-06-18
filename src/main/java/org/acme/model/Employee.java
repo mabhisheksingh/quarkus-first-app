@@ -1,16 +1,9 @@
-package org.acme.pojo;
+package org.acme.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +15,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "employee", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "name", "age" })
+        @UniqueConstraint(columnNames = {"email"}, name= "uniqueEmail")
 })
 public class Employee extends PanacheEntityBase {
     @Id
@@ -35,4 +28,9 @@ public class Employee extends PanacheEntityBase {
     @Min(value = 0)
     @Max(value = 120)
     private Integer age;
+
+    @NotNull
+    @Email
+    @JsonProperty(value = "email")
+    private String email;
 }

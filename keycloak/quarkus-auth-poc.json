@@ -29,34 +29,31 @@
   "frontchannelLogout": true,
   "protocol": "openid-connect",
   "attributes": {
-    "oidc.ciba.grant.enabled": false,
+    "oidc.ciba.grant.enabled": "false",
     "client.secret.creation.time": "1718361897",
     "backchannel.logout.session.required": "true",
     "login_theme": "keycloak",
     "post.logout.redirect.uris": "http://localhost:9001/logout",
     "display.on.consent.screen": "false",
-    "oauth2.device.authorization.grant.enabled": false,
-    "backchannel.logout.revoke.offline.tokens": "false",
-    "consent.screen.text": "",
-    "frontchannel.logout.url": "",
-    "backchannel.logout.url": ""
+    "oauth2.device.authorization.grant.enabled": "false",
+    "backchannel.logout.revoke.offline.tokens": "false"
   },
   "authenticationFlowBindingOverrides": {},
   "fullScopeAllowed": true,
   "nodeReRegistrationTimeout": -1,
   "protocolMappers": [
     {
-      "name": "Client IP Address",
+      "name": "Client ID",
       "protocol": "openid-connect",
       "protocolMapper": "oidc-usersessionmodel-note-mapper",
       "consentRequired": false,
       "config": {
-        "user.session.note": "clientAddress",
+        "user.session.note": "client_id",
         "introspection.token.claim": "true",
         "userinfo.token.claim": "true",
         "id.token.claim": "true",
         "access.token.claim": "true",
-        "claim.name": "clientAddress",
+        "claim.name": "client_id",
         "jsonType.label": "String"
       }
     },
@@ -76,17 +73,17 @@
       }
     },
     {
-      "name": "Client ID",
+      "name": "Client IP Address",
       "protocol": "openid-connect",
       "protocolMapper": "oidc-usersessionmodel-note-mapper",
       "consentRequired": false,
       "config": {
-        "user.session.note": "client_id",
+        "user.session.note": "clientAddress",
         "introspection.token.claim": "true",
         "userinfo.token.claim": "true",
         "id.token.claim": "true",
         "access.token.claim": "true",
-        "claim.name": "client_id",
+        "claim.name": "clientAddress",
         "jsonType.label": "String"
       }
     }
@@ -94,8 +91,8 @@
   "defaultClientScopes": [
     "web-origins",
     "acr",
-    "profile",
     "roles",
+    "profile",
     "basic",
     "email"
   ],

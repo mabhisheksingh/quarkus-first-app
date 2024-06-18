@@ -8,16 +8,13 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.exception.BadRequestException;
-import org.acme.exception.DublicateDataException;
-import org.acme.pojo.Employee;
+import org.acme.model.Employee;
 import org.acme.service.EmployeeService;
 import org.acme.utils.customAOP.Logged;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
-import org.hibernate.exception.ConstraintViolationException;
 import org.jboss.logging.Logger;
 
 import java.util.List;
-import java.util.Objects;
 
 @Path("/v1/api/emp")
 @Logged
@@ -41,17 +38,8 @@ public class EmployeeController {
     @Transactional
     @SecurityRequirement(name = "keycloak-custom")
     public Response createEmp(@Valid Employee emp) {
-        if (Objects.isNull(emp)) {
-            throw new NullPointerException("EMPLOYEE Obj is null");
-        }
-        try {
-            employeeService.persist(emp);
-        } catch (ConstraintViolationException exception) {
-            throw new DublicateDataException(exception.getSQLException().getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return Response.ok(emp).build();
+        Long id = employeeService.saveOrUpdate(emp);
+        return Response.ok(id).build();
     }
 
     @GET
@@ -61,7 +49,7 @@ public class EmployeeController {
     @RolesAllowed({"admin"})
     @SecurityRequirement(name = "keycloak-custom")
     public List<Employee> getAllEmp() {
-        return employeeService.listAll();
+        return employeeService.getAllEmp();
     }
 
     @GET
@@ -72,12 +60,9 @@ public class EmployeeController {
     @SecurityRequirement(name = "keycloak-custom")
     public Response getAllEmpById(@QueryParam("id") Long id) throws BadRequestException {
         System.out.println("ID " + id);
-        Employee employee = employeeService.findById(id);
+        Employee employee = employeeService.getEmpId(id);
         log.info("Id " + id);
         log.info("Employee " + employee);
-        if (Objects.isNull(employee)) {
-            throw new BadRequestException("ID not find ");
-        }
         return Response.ok(employee).build();
 
     }
