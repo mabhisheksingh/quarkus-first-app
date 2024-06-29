@@ -1,60 +1,65 @@
 package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.acme.exception.BadRequestException;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.InternalServerErrorException;
+import jakarta.ws.rs.NotFoundException;
+import org.acme.dto.EmployeeDTO;
 import org.acme.exception.DublicateDataException;
 import org.acme.model.Employee;
-import org.acme.repositorie.EmployeeRepo;
-import org.acme.utils.customAOP.Logged;
-import org.hibernate.exception.ConstraintViolationException;
+import org.jboss.logging.Logger;
 
 import java.util.List;
-import java.util.Objects;
 
 @ApplicationScoped
-public class EmployeeService {
-    EmployeeRepo employeeRepo;
+public class EmployeeService implements BaseService<Employee, Long> {
 
-    EmployeeService(EmployeeRepo employeeRepo) {
-        this.employeeRepo = employeeRepo;
+    private final Logger logger = Logger.getLogger(EmployeeService.class);
+
+    @Transactional
+    public Long saveOrUpdate(EmployeeDTO employeeDTO) {
+        if (getByEmailOptional(employeeDTO.getEmail()).isPresent()) {
+            throw new DublicateDataException("Email already exist in DB" + employeeDTO.getEmail());
+        }
+        Employee emp = new Employee();
+        emp.setName(employeeDTO.getName());
+        emp.setEmail(employeeDTO.getEmail());
+        emp.setAge(employeeDTO.getAge());
+        emp.setPassword(employeeDTO.getPassword());
+
+        addUser(emp);
+        if (isExist(emp)) {
+            logger.info("Data Saved successfully" + emp);
+            return emp.getId();
+        } else {
+            logger.error("Facing issue while saving data");
+            throw new InternalServerErrorException("Facing error ");
+        }
     }
 
-    @Logged
-    public Long saveOrUpdate(Employee emp) {
-        if (Objects.isNull(emp)) {
-            throw new NullPointerException("EMPLOYEE Obj is null");
-        }
-        try {
-            employeeRepo.persist(emp);
-        } catch (ConstraintViolationException exception) {
-            throw new DublicateDataException(exception.getSQLException().getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return emp.getId();
+    @Transactional
+    public List<EmployeeDTO> getAllEmpWithOutPaging() {
+        return getAll().stream().parallel().map(emp ->
+                EmployeeDTO.builder()
+                        .age(emp.getAge())
+                        .email(emp.getEmail())
+                        .name(emp.getName())
+                        .id(emp.getId())
+                        .build()
+        ).toList();
     }
 
-    @Logged
-    public List getAllEmp() {
-        List list;
-        try {
-            list = employeeRepo.listAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return list;
-    }
-
-    @Logged
-    public Employee getEmpId(Long id) throws BadRequestException {
-        if (Objects.isNull(id)) {
-            throw new NullPointerException("EMPLOYEE ID is null");
-        }
-        Employee employee = employeeRepo.findById(id);
-        if (Objects.isNull(employee)) {
-            throw new BadRequestException("ID not find ");
-        }
-        return employee;
+    @Transactional
+    public EmployeeDTO getEmpId(Long id) {
+        return getByIdOptional(id).map(employee -> EmployeeDTO.builder()
+                .id(employee.getId())
+                .name(employee.getName())
+                .age(employee.getAge())
+                .email(employee.getEmail())
+                .password("Password will not show in API response due serialization blocked") //for testing purpose
+                .build()).orElseThrow(() ->
+                new NotFoundException("Emp id not found " + id)
+        );
     }
 
 }

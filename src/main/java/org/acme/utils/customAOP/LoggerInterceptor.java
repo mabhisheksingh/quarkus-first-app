@@ -25,23 +25,31 @@ public class LoggerInterceptor {
     Object logInvocation(InvocationContext context) throws Exception {
         long start = System.currentTimeMillis();
         logger.info(context.getMethod().getDeclaringClass() + "::" + context.getMethod().getName());
-        logger.info(routingContext.request().headers().entries());
-        Object result = context.proceed();
-        // Intercept the response payload
-        if (result instanceof String) {
-            // If the response is a String
-            String responsePayload = (String) result;
-            logger.debug("String Response payload: " + responsePayload);
-        } else if (result instanceof Buffer) {
-            // If the response is a Buffer (typically used in Vert.x)
-            Buffer responseBuffer = (Buffer) result;
-            String responsePayload = responseBuffer.toString();
-            logger.debug("Buffer Response payload: " + responsePayload);
+        logger.debug(routingContext.request().headers().entries());
+        Object result = null;
+        try {
+            result = context.proceed();
+            // Intercept the response payload
+            if (result instanceof String) {
+                // If the response is a String
+                String responsePayload = (String) result;
+                logger.debug("String Response payload: " + responsePayload);
+            } else if (result instanceof Buffer) {
+                // If the response is a Buffer (typically used in Vert.x)
+                Buffer responseBuffer = (Buffer) result;
+                String responsePayload = responseBuffer.toString();
+                logger.debug("Buffer Response payload: " + responsePayload);
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+            throw ex;
+        } finally {
+            logger.debug(routingContext.request().headers().entries());
+            long end = System.currentTimeMillis();
+            logger.infof("Total time taken by method [%s] is %d ms.\n", context.getMethod().getName(),
+                    (end - start));
         }
-        // logger.info(routingContext.request().headers().entries());
-        logger.info(routingContext.response());
-        long end = System.currentTimeMillis();
-        logger.infof("Total time taken by method [%s] is %f ms.\n", context.getMethod().getName(), (end - start) / 1.0);
+
         return result;
     }
 
