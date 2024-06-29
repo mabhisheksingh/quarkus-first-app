@@ -12,6 +12,8 @@ import lombok.*;
 @Table(name = "employee", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"}, name = "uniqueEmail")
 })
+
+@ToString
 public class Employee extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

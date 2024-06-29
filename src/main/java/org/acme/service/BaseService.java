@@ -12,6 +12,9 @@ public interface BaseService<Entity extends BaseModel, Id extends Long> extends 
     default void addUser(Entity entity) {
         persistAndFlush(entity);
     }
+    default void addBulkUser(List<Entity> entity) {
+        persist(entity);
+    }
 
     default Boolean isExist(Entity entity) {
         return isPersistent(entity);
