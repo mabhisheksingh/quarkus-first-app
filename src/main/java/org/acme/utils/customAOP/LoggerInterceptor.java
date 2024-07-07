@@ -41,6 +41,7 @@ public class LoggerInterceptor {
                 logger.debug("Buffer Response payload: " + responsePayload);
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             logger.error(ex.getMessage());
             throw ex;
         } finally {

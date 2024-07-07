@@ -23,7 +23,7 @@ public class ConstrainValidationExceptionMapper implements ExceptionMapper<Const
         violations.stream().
                 map(violation ->
                         ExceptionEntity.builder()
-                                .field(violation.getPropertyPath().toString())
+                                .errorField(violation.getPropertyPath().toString())
                                 .errorMessage(violation.getMessage())
                                 .errorCode(Response.Status.BAD_REQUEST.getStatusCode())
                                 .build()

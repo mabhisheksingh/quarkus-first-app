@@ -1,7 +1,6 @@
 package org.acme.exception.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

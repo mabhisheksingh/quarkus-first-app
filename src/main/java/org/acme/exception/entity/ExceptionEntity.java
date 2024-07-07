@@ -1,7 +1,10 @@
 package org.acme.exception.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +21,6 @@ import java.io.Serializable;
 public class ExceptionEntity implements Serializable {
     private String errorMessage;
     private Integer errorCode;
-    private String field;
+    @JsonProperty(value = "field")
+    private String errorField;
 }
