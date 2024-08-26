@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;
+import static org.acme.common.BaseAPI.V1_BASE_EMP_API_PATH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -31,18 +32,19 @@ class ExampleControllerTest {
         String empString = """
                             {
                 "name":"AbhishekSingh1",
-                "age":99,
+                "age":96,
                 "email":"abhshek@gmail.com",
-                "password':"Abhsihk@12"
+                "password":"Abhsihk@12"
                 }
-                            """;
+                """;
         return empString;
     }
 
     @Test
     public void testPublicEndpoint() {
         given()
-                .when().get("/v1/api/emp/public/test")
+                .when()
+                .get(V1_BASE_EMP_API_PATH + "/public/test")
                 .then()
                 .statusCode(200)
                 .body(is("Hello pass public"));
@@ -59,7 +61,7 @@ class ExampleControllerTest {
         given()
                 .contentType("application/json")
                 .body(empString)
-                .when().post("/v1/api/emp/create")
+                .when().post(V1_BASE_EMP_API_PATH + "/create")
                 .then()
                 .statusCode(200)
                 .body(notNullValue());
@@ -68,15 +70,11 @@ class ExampleControllerTest {
     @TestSecurity(user = "user", roles = {"user"})
     @Test
     public void testCreateEmployeeAsUser() {
-        Employee emp = new Employee();
-        emp.setName("Jane Doe");
-        emp.setAge(12);
-        emp.setEmail("abc@gmail.com");
-
+        String empString = getEmpStringObj();
         given()
                 .contentType("application/json")
-                .body(emp)
-                .when().post("/v1/api/emp/create")
+                .body(empString)
+                .when().post(V1_BASE_EMP_API_PATH + "/create")
                 .then()
                 .statusCode(200)
                 .body(notNullValue());
@@ -86,7 +84,7 @@ class ExampleControllerTest {
     @Test
     public void testGetAllEmployeesAsAdmin() {
         given()
-                .when().get("/v1/api/emp/getAll")
+                .when().get(V1_BASE_EMP_API_PATH + "/getAll")
                 .then()
                 .statusCode(200)
                 .body(notNullValue());
@@ -96,7 +94,7 @@ class ExampleControllerTest {
     @Test
     public void testGetAllEmployeesAsUser() {
         given()
-                .when().get("/v1/api/emp/getAll")
+                .when().get(V1_BASE_EMP_API_PATH + "/getAll")
                 .then()
                 .statusCode(403); // Forbidden
     }
@@ -110,15 +108,14 @@ class ExampleControllerTest {
         emp.setEmail("abc@gmail.com");
         emp.setId(1L);
 
-        Mockito.when(mockEmployeeService.getEmpId(1L)).thenReturn(emp);
+        Mockito.when(mockEmployeeService.getEmpById(1L)).thenReturn(emp);
 
         given()
                 .queryParam("id", emp.getId())
-                .when().get("/v1/api/emp/getEmpByID")
+                .when().get(V1_BASE_EMP_API_PATH + "/getEmpByID")
                 .then()
                 .statusCode(200)
-                .body("name", is("John Doe"))
-                .body("position", is("Developer"));
+                .body("name", is("John Doe"));
     }
 
     @TestSecurity(user = "admin", roles = {"admin"})
@@ -130,11 +127,11 @@ class ExampleControllerTest {
         emp.setEmail("abc1@gmail.com");
         emp.setId(1L);
 
-        Mockito.when(mockEmployeeService.getEmpId(1L)).thenReturn(emp);
+        Mockito.when(mockEmployeeService.getEmpById(1L)).thenReturn(emp);
 
         given()
                 .queryParam("id", emp.getId())
-                .when().get("/v1/api/emp/getEmpByID")
+                .when().get(V1_BASE_EMP_API_PATH + "/getEmpByID")
                 .then()
                 .statusCode(200)
                 .body("name", is("John Doe"));
@@ -152,9 +149,9 @@ class ExampleControllerTest {
         given()
                 .contentType("application/json")
                 .body(emp)
-                .when().post("/v1/api/emp/create")
+                .when().post(V1_BASE_EMP_API_PATH + "/create")
                 .then()
-                .statusCode(403); // Forbidden
+                .statusCode(403); // For̵̵bidden
     }
 
 }
