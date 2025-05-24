@@ -1,0 +1,26 @@
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.2
+    command: start-dev --import-realm
+    ports:
+      - "9003:8080"  # Maps container port 8080 to host port 9003
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_HOSTNAME: localhost
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./realm/realm-export_basic.json:/opt/keycloak/data/import/realms.json
+#      - ./MY_Certificate:/etc/x509/https
+    networks:
+      - keycloak_network
+
+volumes:
+  keycloak_data:
+
+networks:
+  keycloak_network:
+    driver: bridge
